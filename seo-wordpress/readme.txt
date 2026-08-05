@@ -1,9 +1,9 @@
-=== Praison AI SEO ===
+=== AISEO ===
 Contributors: MervinPraison
 Tags: seo, ai, openai, schema, sitemap
 Requires at least: 5.0
-Tested up to: 6.8
-Stable tag: 5.0.7
+Tested up to: 6.9
+Stable tag: 5.0.8
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -12,7 +12,7 @@ AI-powered SEO optimization for WordPress. Generate meta descriptions, titles, s
 
 == Description ==
 
-Praison AI SEO is a powerful AI-powered SEO plugin that helps you optimize your WordPress content using OpenAI's GPT-4o-mini model. Automatically generate SEO-optimized meta titles, descriptions, schema markup, and get comprehensive content analysis.
+AISEO is a powerful AI-powered SEO plugin that helps you optimize your WordPress content using OpenAI's GPT-4o-mini model. Automatically generate SEO-optimized meta titles, descriptions, schema markup, and get comprehensive content analysis.
 
 = Key Features =
 
@@ -164,6 +164,43 @@ Yes! AISEO is compatible with WPML, Polylang, and TranslatePress. It can sync me
 
 == Changelog ==
 
+= 5.0.8 =
+* Security: Remove nonce verification bypass in the AI title and description AJAX handlers; both now enforce check_ajax_referer() and an edit_posts capability check
+* Security: Remove the debug AJAX request logger that wrote nonces, user IDs, and full POST payloads to the error log
+* Security: Require the edit_posts capability on the nonce refresh endpoint
+* Fix: Stop writing debug messages to the error log on every front-end request and WP-CLI command
+* Fix: Give the post editor metabox its own AJAX actions so its handlers are no longer shadowed by the admin screen handlers; the metabox Focus Keyword and Analyze Content buttons work again
+* Remove leftover debug logging from the admin screens and browser console
+
+= 5.0.7 =
+* Security: Require authentication and capability checks on all aiseo/v1 REST API routes
+* Security: Prevent unauthenticated access to settings, redirects, analytics, and post modification endpoints
+* Fix: Add per-post and per-term permission checks for object-specific REST routes
+
+= 5.0.1 =
+* Fix: Limit to 5 tags as required by WordPress.org
+
+= 5.0.0 =
+* Complete rewrite with modern architecture
+* Added REST API with 60+ endpoints
+* Added WP-CLI support with 70+ commands
+* Added Homepage SEO settings (title, description, keywords)
+* Added Taxonomy SEO (categories, tags, custom taxonomies)
+* Added Webmaster Verification (Google, Bing, Yandex, Pinterest, Baidu)
+* Added Google Analytics integration (GA4 support)
+* Added Title Templates with placeholders
+* Added Global Robots Settings (noindex/nofollow)
+* Added Visual Breadcrumbs with shortcode and schema markup
+* Added Legacy Sitemap URLs support (sitemap_index.xml, post-sitemap.xml)
+* Added RSS Feed Customization
+* Added Import from legacy Praison SEO plugin
+* Improved AI-powered content generation
+* Enhanced schema markup support
+* Better performance with caching system
+
+= 4.0.18 =
+* Previous version (legacy Praison SEO)
+
 = 1.0.0 =
 * Initial release
 * AI-powered meta title and description generation
@@ -195,57 +232,47 @@ Yes! AISEO is compatible with WPML, Polylang, and TranslatePress. It can sync me
 * Structured logging and monitoring
 * Performance optimizations
 
-== Changelog ==
-
-= 5.0.7 =
-* Security: Require authentication and capability checks on all aiseo/v1 REST API routes
-* Security: Prevent unauthenticated access to settings, redirects, analytics, and post modification endpoints
-* Fix: Add per-post and per-term permission checks for object-specific REST routes
-
-= 5.0.5 =
-* Improved publishing workflow
-
-= 5.0.4 =
-* Add publish.sh script for automated WordPress.org publishing
-
-= 5.0.3 =
-* Update plugin name to Praison AI SEO
-
-= 5.0.2 =
-* Add seo-wordpress.php for WordPress.org compatibility
-* Unified repository for both AISEO and seo-wordpress plugins
-
-= 5.0.1 =
-* Fix: Limit to 5 tags as required by WordPress.org
-
-= 5.0.0 =
-* Complete rewrite with modern architecture
-* Added REST API with 60+ endpoints
-* Added WP-CLI support with 70+ commands
-* Added Homepage SEO settings (title, description, keywords)
-* Added Taxonomy SEO (categories, tags, custom taxonomies)
-* Added Webmaster Verification (Google, Bing, Yandex, Pinterest, Baidu)
-* Added Google Analytics integration (GA4 support)
-* Added Title Templates with placeholders
-* Added Global Robots Settings (noindex/nofollow)
-* Added Visual Breadcrumbs with shortcode and schema markup
-* Added Legacy Sitemap URLs support (sitemap_index.xml, post-sitemap.xml)
-* Added RSS Feed Customization
-* Added Import from legacy Praison SEO plugin
-* Improved AI-powered content generation
-* Enhanced schema markup support
-* Better performance with caching system
-
-= 4.0.18 =
-* Previous version (legacy Praison SEO)
-
 == Upgrade Notice ==
+
+= 5.0.8 =
+Important security update. Removes a nonce verification bypass in the AI generation AJAX handlers and stops debug data being written to the error log. Please update immediately.
 
 = 5.0.7 =
 Important security update. Please update immediately.
 
 = 5.0.0 =
 Major update! Complete rewrite with modern architecture, REST API, WP-CLI support, and many new features.
+
+== External Services ==
+
+This plugin relies on the OpenAI API to provide its AI-powered features. It is required for any feature that generates or analyses content with AI.
+
+What it is used for:
+* Generating SEO meta titles, meta descriptions, and focus keywords
+* Generating content outlines, FAQs, briefs, and content suggestions
+* Rewriting and improving existing content
+* Generating image alt text (including image analysis via the vision model)
+* AI-assisted content and SEO analysis
+
+What data is sent and when: when you trigger one of the AI features listed above (manually from the post editor, the plugin admin screens, the REST API, or WP-CLI), the plugin sends the relevant post or image content, and where applicable the focus keyword, to the OpenAI API. No data is sent unless you trigger one of these features, and no data is sent to any service operated by the plugin author.
+
+This service is provided by OpenAI:
+* Terms of use: https://openai.com/policies/row-terms-of-use/
+* Privacy policy: https://openai.com/policies/row-privacy-policy/
+
+You must supply your own OpenAI API key to use these features.
+
+= Google Analytics (optional) =
+
+If you enable the Google Analytics integration and enter your own GA4 measurement ID, the plugin loads the Google Tag (gtag.js) script from Google on your site's front end, which sends visitor analytics data to Google. This is disabled by default and only happens if you enable it and provide a measurement ID.
+
+This service is provided by Google:
+* Terms of service: https://policies.google.com/terms
+* Privacy policy: https://policies.google.com/privacy
+
+= Competitor and backlink analysis (optional) =
+
+The competitor analysis and backlink monitoring features fetch the URLs that you explicitly add in the plugin's settings, in order to read their public pages. Requests are only made to addresses you enter yourself.
 
 == Privacy Policy ==
 
